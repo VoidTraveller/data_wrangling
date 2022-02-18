@@ -26,3 +26,25 @@ citibike_reader = csv.DictReader(source_file)
 # like a `fieldnames` property that lets us access all the values
 # in the first or "header" row
 print(citibike_reader.fieldnames)
+
+# create a variable to hold the count of each type of Citi Bike user
+# assign or "initialize" each with a value of zero (0)
+
+subscriber_count = 0
+customer_count = 0 
+other_user_count = 0
+
+for a_user in citibike_reader:
+    if a_user["usertype"] == 'Subscriber':
+        subscriber_count = subscriber_count + 1
+    elif a_user["usertype"] == 'Customer':
+        customer_count = customer_count + 1
+    else:
+        other_user_count = other_user_count + 1
+
+print("Number of subscribers:")
+print(subscriber_count)
+print("Number of customers:")
+print(customer_count)
+print("Number of 'other' users:")
+print(other_user_count)  
