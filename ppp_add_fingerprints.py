@@ -4,7 +4,7 @@ import fingerprints
 ppp_data = open('public_150k_plus_recent.csv', 'r')
 ppp_data_reader = csv.DictReader(ppp_data)
 
-augmented_ppp_data = open('public_150k_plus_fingerprints.csv', 'w')
+augmented_ppp_data = open('public_150k_plus_borrower_fingerprint_a.csv', 'w')
 augmented_data_writer = csv.writer(augmented_ppp_data)
 
 header_row = []
@@ -12,8 +12,8 @@ header_row = []
 for item in ppp_data_reader.fieldnames:
     header_row.append(item)
     
-    if item == 'OriginatingLender':
-        header_row.append('OriginatingLenderFingerprint')
+    if item == 'BorrowerName':
+        header_row.append('BorrowerNameFingerprint')
         
 augmented_data_writer.writerow(header_row)
 
@@ -23,8 +23,12 @@ for row in ppp_data_reader:
     for column_name in ppp_data_reader.fieldnames:
         new_row.append(row[column_name])
         
-        if column_name == 'OriginatingLender':
-            the_fingerprint = fingerprints.generate(row[column_name]) + " " + row['OriginatingLenderLocationID']
+        if column_name == 'BorrowerName':
+            try:
+                the_fingerprint = fingerprints.generate(row[column_name]) +" "+ fingerprints.generate(row['BorrowerCity'])+" "+row['BorrowerState']
+            except(TypeError):
+                the_fingerprint = fingerprints.generate("MISSING") +" "+ fingerprints.generate(row['BorrowerCity'])+" "+row['BorrowerState']
+            
             new_row.append(the_fingerprint)
     
     augmented_data_writer.writerow(new_row)
